@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class ExcelListener implements ReadListener<CodeUser> {
+public class ExcelNowCoderListener implements ReadListener<CodeUser> {
 
     @Autowired
     private UserMapper userMapper;
 
-    public ExcelListener(UserMapper userMapper) {
+    public ExcelNowCoderListener(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
 

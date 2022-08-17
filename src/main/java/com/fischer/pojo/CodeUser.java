@@ -23,5 +23,7 @@ public class CodeUser {
     private String a;
 
     private String similar;
+    // 0为未通过笔试 1为通过笔试  2为通过笔试且已经发送面试邀请
+    private Integer verify;
 
 }
