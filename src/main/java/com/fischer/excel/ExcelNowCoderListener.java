@@ -5,7 +5,7 @@ import com.alibaba.excel.read.listener.ReadListener;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fischer.exception.BizException;
 import com.fischer.mapper.UserMapper;
-import com.fischer.pojo.CodeUser;
+import com.fischer.pojo.NowcoderUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class ExcelNowCoderListener implements ReadListener<CodeUser> {
+public class ExcelNowCoderListener implements ReadListener<NowcoderUser> {
 
     @Autowired
     private UserMapper userMapper;
@@ -23,28 +23,28 @@ public class ExcelNowCoderListener implements ReadListener<CodeUser> {
         this.userMapper = userMapper;
     }
 
-    private List<CodeUser> codeUserList = new ArrayList<>();
+    private List<NowcoderUser> nowcoderUserList = new ArrayList<>();
     @Override
-    public void invoke(CodeUser codeUser, AnalysisContext analysisContext) {
-        codeUserList.add(codeUser);
+    public void invoke(NowcoderUser nowcoderUser, AnalysisContext analysisContext) {
+        nowcoderUserList.add(nowcoderUser);
 
     }
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-        System.out.println(codeUserList);
+        System.out.println(nowcoderUserList);
         saveData();
 
     }
 
     private void saveData() {
-        for (CodeUser user: codeUserList
+        for (NowcoderUser user: nowcoderUserList
 
              ) {
-            LambdaQueryWrapper<CodeUser> lqw = new LambdaQueryWrapper<>();
-            lqw.eq(CodeUser::getUsername,user.getUsername());
-            CodeUser codeUser = userMapper.selectOne(lqw);
-            if(Objects.isNull(codeUser)) {
+            LambdaQueryWrapper<NowcoderUser> lqw = new LambdaQueryWrapper<>();
+            lqw.eq(NowcoderUser::getUsername,user.getUsername());
+            NowcoderUser nowcoderUser = userMapper.selectOne(lqw);
+            if(Objects.isNull(nowcoderUser)) {
                 userMapper.insert(user);
             } else {
                 throw new BizException(500,"数据库中已存在该数据");

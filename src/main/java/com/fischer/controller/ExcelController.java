@@ -5,13 +5,14 @@ import com.fischer.excel.*;
 import com.fischer.exception.BizException;
 import com.fischer.mapper.FeishuMapper;
 import com.fischer.mapper.UserMapper;
-import com.fischer.pojo.CodeUser;
+import com.fischer.pojo.NowcoderUser;
 import com.fischer.pojo.FeishuUser;
 import com.fischer.pojo.ResponseResult;
 import com.fischer.pojo.UserWithScore;
 import com.fischer.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,24 +23,34 @@ import java.util.List;
 @RestController
 @Slf4j
 public class ExcelController {
-    @Autowired
     private UserMapper userMapper;
 
-    @Autowired
     private FeishuMapper feishuMapper;
 
-    @Autowired
     private EmailService emailService;
+
+    @Value("${filepath.feishu}")
+    private String feishuPath;
+    @Value(("${filepath.nowcoder}"))
+    private String nowcoderPath;
+
+    @Autowired
+    public ExcelController (UserMapper userMapper,
+                            FeishuMapper feishuMapper,
+                            EmailService emailService){
+        this.emailService = emailService;
+        this.feishuMapper = feishuMapper;
+        this.userMapper = userMapper;
+    }
 
     @GetMapping("excel")
     @Transactional(rollbackFor = {Exception.class})
     public ResponseEntity readExcel(){
-        String filename = "D:\\learn_software\\new.xls";
 
-         EasyExcel.read(filename, CodeUser.class,new ExcelNowCoderListener(userMapper)).sheet().doRead();
 
-        String filename1 = "D:\\learn_software\\test.xlsx";
-         EasyExcel.read(filename1, FeishuUser.class,new ExcelFeishuListener(feishuMapper)).sheet().doRead();
+         // EasyExcel.read(feishuPath, NowcoderUser.class,new ExcelNowCoderListener()).sheet().doRead();
+
+         EasyExcel.read(feishuPath, FeishuUser.class,new ExcelFeishuListener(feishuMapper)).sheet().doRead();
 
         return ResponseEntity.ok().body("");
 
@@ -59,7 +70,7 @@ public class ExcelController {
             String username = user.getNewCoder();
 
             try {
-                emailService.sendHtmlFile(user);
+                emailService.sendInterview(user);
                 userMapper.updateEmailStatus(username);
             } catch (Exception e) {
                 log.error("邮箱发送失败，当前QQ为："+user.getQq());
@@ -78,6 +89,8 @@ public class ExcelController {
 
 
     }
+
+
 
 
 }

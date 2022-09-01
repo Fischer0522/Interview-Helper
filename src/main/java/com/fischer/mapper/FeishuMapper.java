@@ -18,6 +18,9 @@ public interface FeishuMapper extends BaseMapper<FeishuUser> {
     @Select("select f.*,c.rank,c.score,c.verify from feishu_user f ,code_user c where c.verify = 1 and c.username = f.new_coder order by c.score desc ")
     List<UserWithScore> getAllByVerify();
 
+    @Select("select * from feishu_user f  where f.exam is null or f.exam = '是'")
+    List<FeishuUser> getByExam();
+
 
 
 

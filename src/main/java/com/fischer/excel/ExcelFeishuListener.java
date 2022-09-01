@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fischer.exception.BizException;
 import com.fischer.mapper.FeishuMapper;
 import com.fischer.pojo.FeishuUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
+@Slf4j
 public class ExcelFeishuListener implements ReadListener<FeishuUser> {
 
     private FeishuMapper feishuMapper;
@@ -40,7 +42,7 @@ public class ExcelFeishuListener implements ReadListener<FeishuUser> {
             if(Objects.isNull(feishuUser)) {
                 feishuMapper.insert(f);
             } else {
-                throw new BizException(500,"数据库中已存在该条数据");
+                log.warn(f.getUsername()+"填写了多次表单");
             }
 
         }

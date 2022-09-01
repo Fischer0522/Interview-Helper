@@ -1,5 +1,6 @@
 package com.fischer.service;
 
+import com.fischer.pojo.FeishuUser;
 import com.fischer.pojo.UserWithScore;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,11 @@ public interface EmailService {
      *  需获取验证码的邮箱*/
     void send(UserWithScore user);
 
-    void sendHtmlFile(UserWithScore user);
+    void sendInterview(FeishuUser user);
+
+    void sendExam(FeishuUser user);
+
+    void receiveMail();
 
 
 
